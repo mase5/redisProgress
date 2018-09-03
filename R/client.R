@@ -75,10 +75,13 @@ RedisClientRRedis = setRefClass("RedisClientRRedis",
            if(size > len) {
                size = len
            }
-           if( is.null(start) ) {
-               start = max(0, len - size)
+           if(is.null(start) | !is.numeric(start)) {
+               start = 0
            }
-           unlist(rredis::redisLRange(key, start=start, end=len - 1))
+           if(start < 0) {
+               start = 0
+           }
+           unlist(rredis::redisLRange(key=key, start=start, end=size))
         },
 
         set = function(key, value) {
